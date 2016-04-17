@@ -2,6 +2,7 @@
 #define HashTable_HH
 
 #include "IHashTable.hh"
+#include "List.hh"
 #include <iostream>
 #include <string>
 using namespace std;
@@ -31,21 +32,22 @@ class HashTable : public IHashTable
 {
 private:
 	int tableSize;
-	HashEntry **table;
+	List<HashEntry*> **table;
 public:
 	HashTable(int size)
 	{
 		tableSize = size;
-		table = new HashEntry*[tableSize];
+		table = new List<HashEntry*>*[tableSize];
 		for(int i = 0; i < tableSize; i++)
 		{
-			table[i] = NULL;
+			table[i] = new List<HashEntry*>();
 		}
+		
 	}
     ~HashTable() 
     {
+    	cout << "Hash Table Destructor" << endl;
     	for (int i = 0; i < tableSize; i++)
-
     	{
     		if (table[i] != NULL)
     		{
@@ -56,46 +58,107 @@ public:
     }
 	virtual int Hash(string key)
 	{	
-		int sum = 0;
+		/*int sum = 0;
 		for(int i=0; i < key.length(); i++)
 		{
 			sum += key[i];
 		}
-		return sum % tableSize;
+		return sum % tableSize;*/
+		const unsigned char *str;
+		str = reinterpret_cast<const unsigned char *> (key.c_str());
+		unsigned long hash = 0;
+		int c;
+		while(c = *str++)
+		{
+			hash = c + (hash << 6) + (hash << 16) - hash;
+		}
+		return hash % tableSize;
 	}
 	virtual int Get(string key)
 	{
 		int hash = Hash(key);
-		cout << "GET_HASH:" << hash << endl;
-        while (table[hash] != NULL && table[hash]->GetKey() != key)
-        {
-        	hash = (hash + 1) % tableSize;
-        	cout << "GET_NEXT_HASH:" << hash << endl;
-        }
-        if (table[hash] == NULL)
-        {
-        	return -1;	
-        }
-        else
-        {
-        	return table[hash]->GetValue();
-        }
+		int tempValue = -1;
+		if (table[hash] == NULL)
+		{
+			return -1;	
+		}
+		else
+		{
+			//find element on list
+			for(int i = 0; i < table[hash]->Size(); i++)
+			{
+				if(table[hash]->Get(i)->GetKey() == key)
+				{
+					tempValue = table[hash]->Get(i)->GetValue();
+					//cout << "Get " << key << " from slot " << hash << " at index " << i << endl;
+				}
+			}
+			return tempValue;
+		}
 	}
 	virtual void Put(string key, int value)
 	{
 		int hash = Hash(key);
-		cout << "PUT_HASH:" << hash << endl;
-		while (table[hash] != NULL && table[hash]->GetKey() != key)
+		table[hash]->AddNext(new HashEntry(key,value));
+		//cout << "Put " << key << " to slot " << hash << endl;
+	}
+	
+	virtual void Remove(string key)
+	{
+		int hash = Hash(key);
+		if (table[hash] == NULL)
 		{
-			hash = (hash + 1) % tableSize;
-			cout << "PUT_NEXT_HASH:" << hash << endl;
+			cout << "There is no key " << key << "!!!" << endl;
 		}
-		if (table[hash] != NULL)
+		else
 		{
-			delete table[hash];
+			//find element on list and remove
+			for(int i = 0; i < table[hash]->Size(); i++)
+			{
+				if(table[hash]->Get(i)->GetKey() == key)
+				{
+					table[hash]->Remove(i);
+					break;
+					//cout << "Removed " << key << " from slot " << hash << " at index " << i << endl;
+				}
+			}
 		}
-		table[hash] = new HashEntry(key, value);
-	}	
+	}
+	
+	void ShowAll()
+	{
+		cout << endl;
+		for(int i = 0; i < tableSize; i++)
+		{
+			cout << "Slot number " << i << ": " << endl;
+			for(int j = 0; j < table[i]->Size(); j++)
+			{
+				cout << table[i]->Get(j)->GetKey() << ": " << table[i]->Get(j)->GetValue() <<"; ";
+			}
+			cout << endl;
+		}
+	}
+	
+	void ShowLists()
+	{
+		cout << endl;
+		for(int i = 0; i < tableSize; i++)
+		{
+			cout << "Slot number " << i << ": ";
+			cout << ", List size: " << table[i]->Size() << endl;
+			cout << endl;
+		}
+	}
+	
+	int AverageListSize()
+	{
+		int value = 0;
+		for(int i = 0; i < tableSize; i++)
+		{
+			value += table[i]->Size();
+		}
+		return value/tableSize;
+	}
 };
 
 

@@ -1,5 +1,5 @@
 #ifndef List_HH
-#define ListHH
+#define List_HH
 
 #include "IList.hh"
 #include "Array.hh"
@@ -63,6 +63,11 @@ public:
 		{
 			throw IndexOutOfRangeException();
 		}
+	}
+	
+	virtual void AddNext(type item)
+	{
+		Add(item, size);
 	}
 	
 	virtual void Remove(int index)

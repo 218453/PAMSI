@@ -2,10 +2,12 @@ __start__: Program
 	./Program 
 
 Program: obj obj/Main.o obj/Array.o obj/TimeCounter.o obj/ArrayRunner.o\
-	 obj/Stack.o obj/Queue.o obj/List.o obj/ListTest.o obj/HashTable.o
+	 obj/Stack.o obj/Queue.o obj/List.o obj/ListTest.o obj/HashTable.o obj/AssociativeArray.o\
+	obj/AssociativeArrayTest.o
 	g++ -o Program obj/Main.o obj/TimeCounter.o\
 			obj/ArrayRunner.o obj/Array.o obj/Stack.o\
-			obj/Queue.o obj/List.o obj/ListTest.o obj/HashTable.o
+			obj/Queue.o obj/List.o obj/ListTest.o obj/HashTable.o obj/AssociativeArray.o\
+			obj/AssociativeArray.o
 
 obj:
 	mkdir obj
@@ -36,6 +38,12 @@ obj/ListTest.o: ListTest.cpp ListTest.hh
 
 obj/HashTable.o: HashTable.cpp HashTable.hh
 	g++ -c -o obj/HashTable.o HashTable.cpp
+
+obj/AssociativeArray.o: AssociativeArray.cpp AssociativeArray.hh
+	g++ -c -o obj/AssociativeArray.o AssociativeArray.cpp
+
+obj/AssociativeArrayTest.o: AssociativeArrayTest.cpp AssociativeArrayTest.hh
+	g++ -c -o obj/AssociativeArrayTest.o AssociativeArrayTest.cpp
 
 clean:
 	rm -f obj/*.o Program

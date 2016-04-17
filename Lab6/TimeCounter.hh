@@ -32,7 +32,7 @@ class TimeCounter : public IStoper
 		}
 		else
 		{
-			cout << "Error" << endl;
+			cout << "Error! Wrong time: " << endTime-startTime << endl;
 			return 0.0;
 		}
 	}
@@ -48,16 +48,11 @@ class TimeCounter : public IStoper
 
 		 gettimeofday(&tv, NULL);
 
-		 long ret = tv.tv_usec;
-		 /* Convert from micro seconds (10^-6) to milliseconds (10^-3) */
-		 ret /= 1000;
-
-		 /* Adds the seconds (10^0) after converting them to milliseconds (10^-3) */
-		 ret += (tv.tv_sec * 1000);
-		 return ret;
+		 // returns time in micro seconds (10^-6)
+		 return tv.tv_usec + tv.tv_sec *1000000;
 	}
 	
-	private : void Reset()
+	public : void Reset()
 	{
 		startTime = 0;
 		endTime = 0;

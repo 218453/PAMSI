@@ -16,6 +16,14 @@ public:
 	 * \throw IndexOutOfRangeException when user tries to use this method on a non-existent index.
 	 */
 	virtual void Add(type item, int index) = 0;
+
+	/*!
+	 * \brief Add element to list at end
+	 * 
+	 * \param[in] item - Item which will be added.
+	 * 
+	 */
+	virtual void AddNext(type item) = 0;
 	
 	/*!
 	 * \brief Add element to list at a given index
