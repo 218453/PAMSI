@@ -21,7 +21,7 @@ public:
 	
 	~List()
 	{
-		delete [] listArray;
+		delete listArray;
 	}
 	
 	virtual void Add(type item, int index)
@@ -107,6 +107,16 @@ public:
 	virtual type Get(int index)
 	{
 		return listArray->Get(index);
+	}
+	
+	type & GetReference(int index)
+	{
+		return listArray->GetReference(index);
+	}
+	
+	public : type & operator[] (int index)
+	{
+		return listArray[index];
 	}
 	
 	virtual int Size()

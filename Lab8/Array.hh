@@ -45,6 +45,16 @@ protected:
 		return array[index];
 	}
 	
+	public : type & GetReference(int index)
+	{
+		return array[index];
+	}
+	
+	public : type & operator[] (int index)
+	{
+		return array[index];
+	}
+	
 	public : virtual void Set(type item, int index)
 	{
 		array[index] = item;
