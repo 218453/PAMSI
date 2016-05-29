@@ -39,3 +39,15 @@ wartości funkcji skrótu, o tyle wstawianie jest po prostu dopisaniem elementu 
 w związku z tym musi być O(1).
 
 Ocena: 3
+
+# Lab7 - drzewa
+
+Ocena: 5
+
+# Lab8 - grafy (dfs,bfs)
+
+Ocena: 5
+
+# Lab9 - grafy (b&b)
+
+Brak sprawozdania
